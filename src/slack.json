@@ -1,0 +1,860 @@
+{
+  "groups": {
+    "chat": {
+      "delete": {
+        "description": "Deletes a message.",
+        "method": "post",
+        "uri": "delete",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "Channel containing the message to be deleted."
+          },
+          {
+            "name": "ts",
+            "type": "string",
+            "description": "Timestamp of the message to be deleted."
+          }
+        ],
+        "oneOf": [],
+        "optional": [
+          {
+            "name": "as_user",
+            "type": "boolean",
+            "description": "Pass true to delete the message as the authed user with chat:write:user scope. Bot users in this context are considered authed users. If unused or false, the message will be deleted with chat:write:bot scope."
+          }
+        ]
+      },
+      "deleteScheduledMessage": {
+        "description": "Deletes a pending scheduled message from the queue.",
+        "method": "post",
+        "uri": "deleteScheduledMessage",
+        "required": [
+            {
+              "name": "channel",
+              "type": "string",
+              "description": "The channel the scheduled_message is posting to."
+            },
+            {
+              "name": "scheduled_message_id",
+              "type": "string",
+              "description": "scheduled_message_id returned from call to chat.scheduleMessage"
+            }
+        ],
+        "oneOf": [],
+        "optional": [
+          {
+            "name": "as_user",
+            "type": "boolean",
+            "description": "Pass true to delete the message as the authed user with chat:write:user scope. Bot users in this context are considered authed users. If unused or false, the message will be deleted with chat:write:bot scope."
+          }
+        ]
+      },
+      "getPermalink": {
+        "description": "Retrieve a permalink URL for a specific extant message.",
+        "method": "get",
+        "uri": "getPermalink",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "The ID of the conversation or channel containing the message."
+          },
+          {
+            "name": "message_ts",
+            "type": "string",
+            "description": "A message's ts value, uniquely identifying it within a channel"
+          }
+        ],
+        "oneOf": [],
+        "optional": []
+      },
+      "meMessage": {
+        "description": "Share a me message into a channel.",
+        "method": "post",
+        "uri": "meMessage",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "Channel to send message to. Can be a public channel, private group or IM channel. Can be an encoded ID, or a name."
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "description": "Text of the message to send."
+          }
+        ],
+        "oneOf": [],
+        "optional": []
+      },
+      "postEphemeral": {
+        "description": "Sends an ephemeral message to a user in a channel.",
+        "method": "post",
+        "uri": "postEphemeral",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "Channel, private group, or IM channel to send message to. Can be an encoded ID, or a name."
+          },
+          {
+            "name": "user",
+            "type": "string",
+            "description": "id of the user who will receive the ephemeral message. The user should be in the channel specified by the channel argument."
+          }
+        ],
+        "oneOf": [
+          {
+            "name": "attachments",
+            "type": "string",
+            "description": "A JSON-based array of structured attachments, presented as a URL-encoded string."
+          },
+          {
+            "name": "blocks",
+            "type": "json",
+            "description": "A JSON-based array of structured blocks, presented as a URL-encoded string."
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "description": "How this field works and whether it is required depends on other fields you use in your API call. See below for more detail."
+          }
+        ],
+        "optional": [
+          {
+            "name": "as_user",
+            "type": "boolean",
+            "description": "(Legacy) Pass true to post the message as the authed user. Defaults to true if the chat:write:bot scope is not included. Otherwise, defaults to false."
+          },
+          {
+            "name": "icon_emoji",
+            "type": "string",
+            "description": "Emoji to use as the icon for this message. Overrides icon_url."
+          },
+          {
+            "name": "icon_url",
+            "type": "string",
+            "description": "URL to an image to use as the icon for this message."
+          },
+          {
+            "name": "link_names",
+            "type": "boolean",
+            "description": "Find and link channel names and usernames."
+          },
+          {
+            "name": "parse",
+            "type": "string",
+            "description": "Change how messages are treated. Defaults to none."
+          },
+          {
+            "name": "thread_ts",
+            "type": "string",
+            "description": "Provide another message's ts value to post this message in a thread. Avoid using a reply's ts value; use its parent's value instead. Ephemeral messages in threads are only shown if there is already an active thread."
+          },
+          {
+            "name": "username",
+            "type": "string",
+            "description": "Set your bot's user name."
+          }
+        ]
+      },
+      "postMessage": {
+        "description": "Sends a message to a channel.",
+        "method": "post",
+        "uri": "postMessage",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "An encoded ID that represents a channel, private group, or IM channel to send the message to. See below for more details."
+          }
+        ],
+        "oneOf": [
+          {
+            "name": "attachments",
+            "type": "string",
+            "description": "A JSON-based array of structured attachments, presented as a URL-encoded string."
+          },
+          {
+            "name": "blocks",
+            "type": "json",
+            "description": "A JSON-based array of structured blocks, presented as a URL-encoded string."
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "description": "How this field works and whether it is required depends on other fields you use in your API call. See below for more detail."
+          }
+        ],
+        "optional": [
+          {
+            "name": "as_user",
+            "type": "boolean",
+            "description": "(Legacy) Pass true to post the message as the authed user instead of as a bot. Defaults to false. Can only be used by classic apps. See legacy as_user parameter below."
+          },
+          {
+            "name": "icon_emoji",
+            "type": "string",
+            "description": "Emoji to use as the icon for this message. Overrides icon_url."
+          },
+          {
+            "name": "icon_url",
+            "type": "string",
+            "description": "URL to an image to use as the icon for this message."
+          },
+          {
+            "name": "link_names",
+            "type": "boolean",
+            "description": "Find and link user groups. No longer supports linking individual users; use syntax shown in Mentioning Users instead."
+          },
+          {
+            "name": "metadata",
+            "type": "string",
+            "description": "JSON object with event_type and event_payload fields, presented as a URL-encoded string. Metadata you post to Slack is accessible to any app or user who is a member of that workspace."
+          },
+          {
+            "name": "mrkdwn",
+            "type": "boolean",
+            "description": "Disable Slack markup parsing by setting to false. Enabled by default."
+          },
+          {
+            "name": "parse",
+            "type": "string",
+            "description": "Change how messages are treated. See below."
+          },
+          {
+            "name": "reply_broadcast",
+            "type": "boolean",
+            "description": "Used in conjunction with thread_ts and indicates whether reply should be made visible to everyone in the channel or conversation. Defaults to false."
+          },
+          {
+            "name": "thread_ts",
+            "type": "string",
+            "description": "Provide another message's ts value to make this message a reply. Avoid using a reply's ts value; use its parent instead."
+          },
+          {
+            "name": "unfurl_links",
+            "type": "boolean",
+            "description": "Pass true to enable unfurling of primarily text-based content"
+          },
+          {
+            "name": "unfurl_media",
+            "type": "boolean",
+            "description": "Pass false to disable unfurling of media content."
+          },
+          {
+            "name": "username",
+            "type": "string",
+            "description": "Set your bot's user name."
+          }
+        ]
+      },
+      "scheduleMessage": {
+        "description": "Schedules a message to be sent to a channel.",
+        "method": "post",
+        "uri": "scheduleMessage",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "Channel, private group, or DM channel to send message to. Can be an encoded ID, or a name. See below for more details."
+          },
+          {
+            "name": "post_at",
+            "type": "integer",
+            "description": "Unix timestamp representing the future time the message should post to Slack."
+          }
+        ],
+        "oneOf": [
+          {
+            "name": "attachments",
+            "type": "string",
+            "description": "A JSON-based array of structured attachments, presented as a URL-encoded string."
+          },
+          {
+            "name": "blocks",
+            "type": "json",
+            "description": "A JSON-based array of structured blocks, presented as a URL-encoded string."
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "description": "How this field works and whether it is required depends on other fields you use in your API call. See below for more detail."
+          }
+        ],
+        "optional": []
+      },
+      "unfurl": {
+        "description": "Provide custom unfurl behavior for user-posted URLs.",
+        "method": "post",
+        "uri": "unfurl",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "Channel ID of the message. Both channel and ts must be provided together, or unfurl_id and source must be provided together."
+          },
+          {
+            "name": "ts",
+            "type": "string",
+            "description": "Timestamp of the message to add unfurl behavior to."
+          },
+          {
+            "name": "unfurls",
+            "type": "string",
+            "description": "URL-encoded JSON map with keys set to URLs featured in the the message, pointing to their unfurl blocks or message attachments."
+          }
+        ],
+        "oneOf": [],
+        "optional": [
+          {
+            "name": "source",
+            "type": "enum",
+            "description": "The source of the link to unfurl. The source may either be composer, when the link is inside the message composer, or conversations_history, when the link has been posted to a conversation.",
+            "enum": [ "composer", "conversations_history" ]
+          },
+          {
+            "name": "unfurl_id",
+            "type": "string",
+            "description": "The ID of the link to unfurl. Both unfurl_id and source must be provided together, or channel and ts must be provided together."
+          },
+          {
+            "name": "user_auth_blocks",
+            "type": "string",
+            "description": "Provide a JSON based array of structured blocks presented as URL-encoded string to send as an ephemeral message to the user as invitation to authenticate further and enable full unfurling behavior"
+          },
+          {
+            "name": "user_auth_message",
+            "type": "null",
+            "description": "Provide a simply-formatted string to send as an ephemeral message to the user as invitation to authenticate further and enable full unfurling behavior. Provides two buttons, Not now"
+          },
+          {
+            "name": "user_auth_required",
+            "type": "boolean",
+            "description": "Set to true or 1 to indicate the user must install your Slack app to trigger unfurls for this domain"
+          },
+          {
+            "name": "user_auth_url",
+            "type": "null",
+            "description": "Send users to this custom URL where they will complete authentication in your app to fully trigger unfurling. Value should be properly URL-encoded."
+          }
+        ]
+      },
+      "update": {
+        "description": "Updates a message.",
+        "method": "post",
+        "uri": "update",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "Channel containing the message to be updated."
+          },
+          {
+            "name": "ts",
+            "type": "string",
+            "description": "Timestamp of the message to be updated."
+          }
+        ],
+        "oneOf": [
+          {
+            "name": "attachments",
+            "type": "string",
+            "description": "A JSON-based array of structured attachments, presented as a URL-encoded string."
+          },
+          {
+            "name": "blocks",
+            "type": "json",
+            "description": "A JSON-based array of structured blocks, presented as a URL-encoded string."
+          },
+          {
+            "name": "text",
+            "type": "string",
+            "description": "How this field works and whether it is required depends on other fields you use in your API call. See below for more detail."
+          }
+        ],
+        "optional": [
+          {
+            "name": "as_user",
+            "type": "boolean",
+            "description": "Pass true to update the message as the authed user. Bot users in this context are considered authed users."
+          },
+          {
+            "name": "file_ids",
+            "type": "array",
+            "description": "Array of new file ids that will be sent with this message."
+          },
+          {
+            "name": "file_ids",
+            "type": "array",
+            "description": "Array of new file ids that will be sent with this message."
+          }
+        ]
+      },
+      "scheduledMessages.list": {
+        "description": "Returns a list of scheduled messages.",
+        "method": "post",
+        "uri": "scheduledMessages.list",
+        "required": [],
+        "oneOf": [],
+        "optional": []
+      }
+    },
+    "auth": {
+      "revoke": {
+        "description": "Revokes a token.",
+        "method": "get",
+        "uri": "delete",
+        "required": [],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "test",
+            "type": "boolean",
+            "description": "Setting this parameter to 1 triggers a testing mode where the specified token will not actually be revoked."
+          }
+        ]
+      },
+      "test": {
+        "description": "Checks authentication & identity.",
+        "method": "post",
+        "uri": "test",
+        "required": [],
+        "OneOf": [],
+        "optional": []
+      },
+      "teams.list": {
+        "description": "Obtain a full list of workspaces your org-wide app has been approved for.",
+        "method": "get",
+        "uri": "teams.list",
+        "required": [],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "cursor",
+            "type": "string",
+            "description": "Set cursor to next_cursor returned by the previous call to list items in the next page."
+          },
+          {
+            "name": "include_icon",
+            "type": "boolean",
+            "description": "Whether to return icon paths for each workspace. An icon path represents a URI pointing to the image signifying the workspace."
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "description": "The maximum number of workspaces to return. Must be a positive integer no larger than 1000."
+          }
+        ]
+      }
+    },
+    "conversations": {
+      "acceptSharedInvite": {
+        "description": "Accepts an invitation to a Slack Connect channel.",
+        "method": "post",
+        "uri": "acceptSharedInvite",
+        "required": [
+          {
+            "name": "channel_name",
+            "type": "string",
+            "description": "Name of the channel. If the channel does not exist already in your workspace, this name is the one that the channel will take."
+          }
+        ],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "channel_id",
+            "type": "string",
+            "description": "ID of the channel that you'd like to accept. Must provide either invite_id or channel_id."
+          },
+          {
+            "name": "free_trial_accepted",
+            "type": "boolean",
+            "description": "Whether you'd like to use your workspace's free trial to begin using Slack Connect."
+          },
+          {
+            "name": "invite_id",
+            "type": "string",
+            "description": "ID of the invite that you’d like to accept. Must provide either invite_id or channel_id. See the shared_channel_invite_received event payload for more details on how to retrieve the ID of the invitation."
+          },
+          {
+            "name": "is_private",
+            "type": "boolean",
+            "description": "Whether the channel should be private."
+          },
+          {
+            "name": "team_id",
+            "type": "string",
+            "description": "The ID of the workspace to accept the channel in. If an org-level token is used to call this method, the team_id argument is required."
+          }
+        ]
+      },
+      "approveSharedInvite": {
+        "description": "Approves an invitation to a Slack Connect channel",
+        "method": "post",
+        "uri": "approveSharedInvite",
+        "required": [
+          {
+            "name": "invite_id",
+            "type": "string",
+            "description": "ID of the shared channel invite to approve"
+          }
+        ],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "target_team",
+            "type": "string",
+            "description": "The team or enterprise id of the other party involved in the invitation you are approving"
+          }
+        ]
+      },
+      "archive": {
+        "description": "Archives a conversation.",
+        "method": "post",
+        "uri": "archive",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "ID of conversation to archive"
+          }
+        ],
+        "OneOf": [],
+        "optional": []
+      },
+      "close": {
+        "description": "Closes a direct message or multi-person direct message.",
+        "method": "post",
+        "uri": "close",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "Conversation to close."
+          }
+        ],
+        "OneOf": [],
+        "optional": []
+      },
+      "create": {
+        "description": "Initiates a public or private channel-based conversation",
+        "method": "post",
+        "uri": "create",
+        "required": [
+          {
+            "name": "name",
+            "type": "string",
+            "description": "Name of the public or private channel to create"
+          }
+        ],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "is_private",
+            "type": "boolean",
+            "description": "Create a private channel instead of a public one"
+          },
+          {
+            "name": "team_id",
+            "type": "string",
+            "description": "encoded team id to create the channel in, required if org token is used"
+          }
+        ]
+      },
+      "declineSharedInvite": {
+        "description": "Declines a Slack Connect channel invite.",
+        "method": "post",
+        "uri": "declineSharedInvite",
+        "required": [
+          {
+            "name": "invite_id",
+            "type": "string",
+            "description": "ID of the Slack Connect invite to decline. Subscribe to the shared_channel_invite_accepted event to receive IDs of Slack Connect channel invites that have been accepted and are awaiting approval."
+          }
+        ],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "target_team",
+            "type": "string",
+            "description": "The team or enterprise id of the other party involved in the invitation you are declining"
+          }
+        ]
+      },
+      "history": {
+        "description": "Fetches a conversation's history of messages and events.",
+        "method": "post",
+        "uri": "history",
+        "required": [
+          {
+            "name": "channel",
+            "type": "string",
+            "description": "Conversation ID to fetch history for."
+          }
+        ],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "cursor",
+            "type": "string",
+            "description": "Paginate through collections of data by setting the cursor parameter to a next_cursor attribute returned by a previous request's response_metadata. Default value fetches the first 'page' of the collection. See pagination for more detail."
+          },
+          {
+            "name": "include_all_metadata",
+            "type": "boolean",
+            "description": "Return all metadata associated with this message."
+          },
+          {
+            "name": "inclusive",
+            "type": "boolean",
+            "description": "Include messages with oldest or latest timestamps in results. Ignored unless either timestamp is specified."
+          }
+        ]
+      }
+    },
+    "teams": {
+      "accessLogs": {
+        "description": "Gets the access logs for the current team.",
+        "method": "get",
+        "uri": "accessLogs",
+        "required": [],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "before",
+            "type": "string",
+            "description": "End of time range of logs to include in results (inclusive)."
+          },
+          {
+            "name": "count",
+            "type": "string",
+            "description": "Number of items to return per page.",
+            "default": "100"
+          },
+          {
+            "name": "cursor",
+            "type": "string",
+            "description": "Parameter for pagination. Set cursor equal to the next_cursor attribute returned by the previous request's response_metadata. "
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "description": "The maximum number of items to return. Fewer than the requested number of items may be returned, even if the end of the list hasn't been reached. If specified, result is returned using a cursor-based approach instead of a classic one.",
+            "default": "0"
+          },
+          {
+            "name": "page",
+            "type": "string",
+            "description": "Page number of results to return.",
+            "default": "1"
+          },
+          {
+            "name": "team_id",
+            "type": "string",
+            "description": "encoded team id to get logs from, required if org token is used"
+          }
+        ]
+      },
+      "billableInfo": {
+        "description": "Gets billable users information for the current team.",
+        "method": "get",
+        "uri": "billableInfo",
+        "required": [],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "cursor",
+            "type": "string",
+            "description": "Set cursor to next_cursor returned by previous call, to indicate from where you want to list next page of users list. Default value fetches the first page."
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "description": "The maximum number of items to return."
+          },
+          {
+            "name": "team_id",
+            "type": "string",
+            "description": "encoded team id to get the billable information from, required if org token is used"
+          },
+          {
+            "name": "user",
+            "type": "string",
+            "description": "A user to retrieve the billable information for. Defaults to all users."
+          }
+        ]
+      },
+      "info": {
+        "description": "Gets information about the current team.",
+        "method": "get",
+        "uri": "info",
+        "required": [],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "domain",
+            "type": "string",
+            "description": "Query by domain instead of team (only when team is null). This only works for domains in the same enterprise as the querying team token. This also expects the domain to belong to a team and not the enterprise itself. This is the value set up for the 'Joining This Workspace' workspace setting. If it contains more than one domain, the field will contain multiple comma-separated domain values. If no domain is set, the field is empty."
+          },
+          {
+            "name": "team",
+            "type": "string",
+            "description": "Team to get info about; if omitted, will return information about the current team."
+          }
+        ]
+      },
+      "integrationLogs": {
+        "description": "Gets the integration logs for the current team.",
+        "method": "get",
+        "uri": "integrationLogs",
+        "required": [],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "app_id",
+            "type": "string",
+            "description": "Filter logs to this Slack app. Defaults to all logs."
+          },
+          {
+            "name": "change_type",
+            "type": "enum",
+            "description": "Filter logs with this change type. Possible values are added, removed, enabled, disabled, and updated. Defaults to all logs.\n\nValue should be one ofaddedremovedenableddisabledupdated"
+          },
+          {
+            "name": "count",
+            "type": "string",
+            "description": "Number of items to return per page.",
+            "default": "100"
+          },
+          {
+            "name": "page",
+            "type": "string",
+            "description": "Page number of results to return.",
+            "default": "1"
+          },
+          {
+            "name": "service_id",
+            "type": "string",
+            "description": "Filter logs to this service. Defaults to all logs."
+          },
+          {
+            "name": "team_id",
+            "type": "string",
+            "description": "encoded team id to get logs from, required if org token is used"
+          },
+          {
+            "name": "user",
+            "type": "string",
+            "description": "Filter logs generated by this user’s actions. Defaults to all logs."
+          }
+        ]
+      },
+      "billing.info": {
+        "description": "Gets information about the current team.",
+        "method": "get",
+        "uri": "info",
+        "required": [],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "domain",
+            "type": "string",
+            "description": "Query by domain instead of team (only when team is null). This only works for domains in the same enterprise as the querying team token. This also expects the domain to belong to a team and not the enterprise itself. This is the value set up for the 'Joining This Workspace' workspace setting. If it contains more than one domain, the field will contain multiple comma-separated domain values. If no domain is set, the field is empty."
+          },
+          {
+            "name": "team",
+            "type": "string",
+            "description": "Team to get info about; if omitted, will return information about the current team."
+          }
+        ]
+      },
+      "externalTeams.disconnect": {
+        "description": "Disconnect an external organization.",
+        "method": "get",
+        "uri": "externalTeams.disconnect",
+        "required": [
+          {
+            "name": "target_team",
+            "type": "string",
+            "description": "The team ID of the target team"
+          }
+        ],
+        "OneOf": [],
+        "optional": []
+      },
+      "externalTeams.list": {
+        "description": "Returns a list of all the external teams connected and details about the connection.",
+        "method": "get",
+        "uri": "https://slack.com/api/team.externalTeams.list",
+        "required": [],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "connection_status_filter",
+            "type": "enum",
+            "description": "Status of the connected team.\n\nValue should be one ofCONNECTEDDISCONNECTEDBLOCKEDIN_REVIEW"
+          },
+          {
+            "name": "cursor",
+            "type": "string",
+            "description": "Paginate through collections of data by setting parameter to the team_id attribute returned by a previous request's response_metadata. If not provided, the first page of the collection is returned. See pagination for more detail."
+          },
+          {
+            "name": "limit",
+            "type": "integer",
+            "description": "The maximum number of items to return per page",
+            "default": "20"
+          },
+          {
+            "name": "slack_connect_pref_filter",
+            "type": "array",
+            "description": "Filters connected orgs by Slack Connect pref override(s). Value can be: approved_orgs_only allow_sc_file_uploads profile_visibility away_team_sc_invite_permissions accept_sc_invites sc_mpdm_to_private require_sc_channel_for_sc_dm external_awareness_context_bar"
+          },
+          {
+            "name": "sort_direction",
+            "type": "enum",
+            "description": "Direction to sort in asc or desc\n\nValue should be one ofascdesc",
+            "default": "asc"
+          },
+          {
+            "name": "sort_field",
+            "type": "string",
+            "description": "Name of the parameter that we are sorting by\n\nValue should be one ofteam_namelast_active_timestampconnection_status",
+            "default": "team_name"
+          },
+          {
+            "name": "workspace_filter",
+            "type": "string",
+            "description": "Shows connected orgs which are connected on a specified encoded workspace ID"
+          }
+        ]
+      },
+      "preferences.list": {
+        "description": "Retrieve a list of a workspace's team preferences.",
+        "method": "get",
+        "uri": "preferences.list",
+        "required": [],
+        "OneOf": [],
+        "optional": []
+      },
+      "profile.get": {
+        "description": "Retrieve a team's profile.",
+        "method": "get",
+        "uri": "profile.get",
+        "required": [],
+        "OneOf": [],
+        "optional": [
+          {
+            "name": "visibility",
+            "type": "enum",
+            "description": "Filter by visibility.\n\nValue should be one ofallvisiblehidden",
+            "default": "all"
+          }
+        ]
+      }
+    }
+  }
+}
