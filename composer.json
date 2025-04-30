@@ -2,12 +2,6 @@
     "name": "ocolin/slack",
     "description": "Basic PHP Slack Client",
     "type": "library",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ocolin/EasyEnv"
-        }
-    ],
     "require": {
         "ocolin/easyenv": "^1.0",
         "guzzlehttp/guzzle": "^7.9"
