@@ -7,7 +7,7 @@ namespace Ocolin\Slack;
 use Exception;
 use stdClass;
 
-class Slack
+readonly class Slack
 {
     /**
      * @var HTTP Guzzle based HTTP handler.

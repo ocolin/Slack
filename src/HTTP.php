@@ -7,7 +7,7 @@ namespace Ocolin\Slack;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Ocolin\Env\EasyEnv;
+use Ocolin\EasyEnv\LoadEnv;
 use GuzzleHttp\Psr7\Query;
 use Psr\Http\Message\ResponseInterface;
 use stdClass;
@@ -141,7 +141,7 @@ class HTTP
         }
 
         if( empty( $_ENV['SLACK_TOKEN'] ) OR empty( $_ENV['SLACK_BASE_URL'] )) {
-            EasyEnv::loadEnv( path: __DIR__ . '/../.env', append: true );
+            new LoadEnv( files: __DIR__ . '/../.env', append: true );
         }
     }
 
