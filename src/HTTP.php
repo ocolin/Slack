@@ -1,164 +1,158 @@
 <?php
 
+/**
+ * Pushover: A simple PHP client for Slack API services.
+ *
+ * @author  Colin Miller <ocolin@staff.cruzio.com>
+ * @copyright Copyright(c) 2025 Colin Miller
+ * @license MIT (opensource.org)
+ * @version 3.0
+ */
+
 declare( strict_types = 1 );
 
 namespace Ocolin\Slack;
 
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Ocolin\EasyEnv\LoadEnv;
-use GuzzleHttp\Psr7\Query;
+use Ocolin\GlobalType\GT;
 use Psr\Http\Message\ResponseInterface;
-use stdClass;
 
 class HTTP
 {
     /**
-     * @var string Slack API Base URL.
-     */
-    public string $base_uri;
-
-    /**
      * @var Client Guzzle HTTP client.
      */
-    public Client $client;
+    private Client $client;
 
     /**
-     * @var string[] Request headers.
+     * Slack API URL
      */
-    public array $headers;
+    private const API_URL = 'https://slack.com/api/';
 
 
-/*
----------------------------------------------------------------------------- */
+/* CONSTRUCTOR
+----------------------------------------------------------------------------- */
 
     /**
-     * @param Client|null $client Guzzle optional client.
-     * @param string|null $token Slack authentication token.
-     * @param string|null $url Base URL of Slack API.
-     * @throws Exception
+     * @param string|null $token API Auth bearer token.
+     * @param bool $verify Verify SSL connection to server.
+     * @param int $timeout HTTP timeout to server.
      */
     public function __construct(
-        ?Client $client = null,
-        ?string $token  = null,
-        ?string $url    = null
+        ?string $token = null,
+           bool $verify = false,
+            int $timeout = 20,
     )
     {
-        self::loadEnv( token: $token );
-        $this->base_uri  = $url ?? $_ENV['SLACK_BASE_URL'];
-        $this->headers = self::default_Headers();
-        $this->client = $client ?? new Client([
-            'base_uri'      => $this->base_uri,
-            'verify'        => false,
-            'http_errors'   => false,
+        $token = $token ?? GT::envString( name: 'SLACK_TOKEN' );
+
+        $this->client = new Client([
+            'base_uri' => self::API_URL,
+            'timeout'  => $timeout,
+            'verify'   => $verify,
+            'http_errors' => false,
+            'http_timeout' => $timeout,
+            'headers' => [
+                'Authorization' => "Bearer $token",
+                'Content-Type'  => 'application/json; charset=utf-8',
+                'User-Agent'    => 'Slack PHP Client 3.0',
+            ]
         ]);
     }
 
 
-/*
----------------------------------------------------------------------------- */
+/* HTTP GET REQUESTS
+----------------------------------------------------------------------------- */
 
     /**
-     * @param string $uri
-     * @param array<string, string> $data Query parameters
-     * @return object Response object.
+     * @param string $method Slack API method to call.
+     * @param array<string,string|int|float>|object $query Query parameters if any.
+     * @return Response HTTP response object.
      * @throws GuzzleException
      */
-    public function get( string $uri, array $data = [] ) : object
+    public function get(
+              string $method,
+        array|object $query = [] ) : Response
     {
-        $options = [
-            'headers' => $this->headers,
-            'query' => Query::build( $data )
-        ];
+        $method = $this->trim_Method( method: $method );
+        //if( gettype( $query ) === 'object' ) { $query = (array)$query; }
 
-        $request = $this->client->request(
-            method: 'GET',
-            uri: $this->base_uri . $uri,
-            options: $options
+        return $this->format_Response( response: $this->client->get(
+            uri: $method, options: [ 'query' => $query ])
         );
-
-        return self::returnResults( request: $request );
     }
 
 
-/*
----------------------------------------------------------------------------- */
+
+/* HTTP POST REQUESTS
+----------------------------------------------------------------------------- */
 
     /**
-     * @param string $uri URI of API request
-     * @param array<string,mixed>|object $data Body of API request.
-     * @return object Response object from API.
+     * @param string $method Slack API method to call.
+     * @param array<string,string|int|float>|object $params POST body parameters.
+     * @param array<string,string|int|float>|object $query URL query parameters.
+     * @return Response HTTP response object.
      * @throws GuzzleException
      */
-    public function post( string $uri, array|object $data = [] ) : object
+    public function post(
+              string $method,
+        array|object $params = [],
+        array|object $query = []
+    ) : Response
     {
-        $request = $this->client->request(
-            method: 'POST',
-            uri: $this->base_uri . $uri,
-            options: [
-                'headers' => $this->headers,
-                'body' => json_encode( value: $data )
-            ]
+        $method = $this->trim_Method( method: $method );
+
+        return $this->format_Response( response: $this->client->post(
+            uri: $method, options: [ 'query' => $query, 'json' => $params ]
+        ));
+    }
+
+
+
+/* FORMAT API HTTP RESPONSE
+----------------------------------------------------------------------------- */
+
+    /**
+     * Format Guzzle HTTP response to an object.
+     *
+     * @param ResponseInterface $response Guzzle HTTP response.
+     * @return Response Formatted API response.
+     */
+    public function format_Response( ResponseInterface $response ): Response
+    {
+        $output = new Response();
+        $output->status         = $response->getStatusCode();
+        $output->headers        = $response->getHeaders();
+        $output->status_message = $response->getReasonPhrase();
+        $output->body           = (object)json_decode(
+            json: $response->getBody()->getContents()
         );
 
-        return self::returnResults( request: $request );
+        return $output;
     }
 
 
 
-/*
----------------------------------------------------------------------------- */
-
-    private static function returnResults(  ResponseInterface $request ) : object
-    {
-        $response = new stdClass();
-        $response->status = $request->getStatusCode();
-        $response->status_message = $request->getReasonPhrase();
-        $response->body = json_decode( json: (string)$request->getBody()->getContents());
-
-        return $response;
-    }
-
-
-
-/*
----------------------------------------------------------------------------- */
+/* REMOVE DUPLICATE SLASHES IN URL
+----------------------------------------------------------------------------- */
 
     /**
-     * @param string|null $token Authentication token.
-     * @return void
-     * @throws Exception
+     * If both the base URL and the end point path have root slash, remove
+     * the one from end point to eliminate a double slash in the final URL.
+     *
+     * @param string $method Method being sent to API server.
+     * @return string Formatted method.
      */
-    public function loadEnv( ?string $token = null, ?string $url = null ) : void
+    private function trim_Method( string $method ) : string
     {
-        if( $token !== null ) {
-            $_ENV['SLACK_TOKEN'] = $token;
+        if(
+            str_starts_with( haystack: $method, needle: '/' ) AND
+            str_ends_with( haystack: self::API_URL, needle: '/' )
+        ) {
+            return trim( string: $method, characters: '/' );
         }
 
-        if( $url !== null ) {
-            $_ENV['SLACK_BASE_URL'] = $url;
-        }
-
-        if( empty( $_ENV['SLACK_TOKEN'] ) OR empty( $_ENV['SLACK_BASE_URL'] )) {
-            new LoadEnv( files: __DIR__ . '/../.env', append: true );
-        }
-    }
-
-
-
-/* GENERATE DEFAULT HEADERS
----------------------------------------------------------------------------- */
-
-    /**
-     * @return string[] Array of headers.
-     */
-    private static function default_Headers() : array
-    {
-        return [
-            'Authorization' => 'Bearer ' . $_ENV['SLACK_TOKEN'],
-            'Content-type'  => 'application/json; charset=utf-8',
-            'User-Agent'    => 'Slack API Client 1.0',
-        ];
+        return $method;
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c04cf1b6d8980f29ff437d69d852898",
+    "content-hash": "610129ca1ed8fd563521b59eb9cfa8f3",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -332,33 +332,31 @@
             "time": "2025-08-23T21:21:41+00:00"
         },
         {
-            "name": "ocolin/easyenv",
-            "version": "2.8",
+            "name": "ocolin/global-type",
+            "version": "1.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ocolin/EasyEnv.git",
-                "reference": "5feb32669ff399d4c6709dd65502dbc1a55b627a"
+                "url": "https://github.com/ocolin/GlobalType.git",
+                "reference": "5b7f5373b80fb42ef60ed265d3aa192625de593e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ocolin/EasyEnv/zipball/5feb32669ff399d4c6709dd65502dbc1a55b627a",
-                "reference": "5feb32669ff399d4c6709dd65502dbc1a55b627a",
+                "url": "https://api.github.com/repos/ocolin/GlobalType/zipball/5b7f5373b80fb42ef60ed265d3aa192625de593e",
+                "reference": "5b7f5373b80fb42ef60ed265d3aa192625de593e",
                 "shasum": ""
             },
             "require": {
-                "ext-ctype": "*"
+                "php": "^8.0"
             },
             "require-dev": {
-                "php": ">=8.2",
-                "phpcompatibility/php-compatibility": "^9.3",
                 "phpstan/phpstan": "^2.1",
-                "phpunit/phpunit": "^12.1"
+                "phpunit/phpunit": "^12.4"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Ocolin\\EasyEnv\\": "src/",
-                    "Ocolin\\EasyEnv\\Tests\\": "tests"
+                    "Ocolin\\GlobalType\\": "src/",
+                    "Ocolin\\GlobaleType\\Tests\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -371,12 +369,12 @@
                     "email": "ocolin@cruzio.com"
                 }
             ],
-            "description": "Very simple tool to load env variables from file",
+            "description": "Simple library for making sure global variables are of a specific type",
             "support": {
-                "issues": "https://github.com/ocolin/EasyEnv/issues",
-                "source": "https://github.com/ocolin/EasyEnv/tree/2.8"
+                "issues": "https://github.com/ocolin/GlobalType/issues",
+                "source": "https://github.com/ocolin/GlobalType/tree/1.5"
             },
-            "time": "2025-11-11T17:29:15+00:00"
+            "time": "2025-12-16T18:35:19+00:00"
         },
         {
             "name": "psr/http-client",
@@ -768,6 +766,53 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.7.0"
             },
             "time": "2025-12-06T11:56:16+00:00"
+        },
+        {
+            "name": "ocolin/easyenv",
+            "version": "2.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ocolin/EasyEnv.git",
+                "reference": "5feb32669ff399d4c6709dd65502dbc1a55b627a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ocolin/EasyEnv/zipball/5feb32669ff399d4c6709dd65502dbc1a55b627a",
+                "reference": "5feb32669ff399d4c6709dd65502dbc1a55b627a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*"
+            },
+            "require-dev": {
+                "php": ">=8.2",
+                "phpcompatibility/php-compatibility": "^9.3",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^12.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ocolin\\EasyEnv\\": "src/",
+                    "Ocolin\\EasyEnv\\Tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Colin Miller",
+                    "email": "ocolin@cruzio.com"
+                }
+            ],
+            "description": "Very simple tool to load env variables from file",
+            "support": {
+                "issues": "https://github.com/ocolin/EasyEnv/issues",
+                "source": "https://github.com/ocolin/EasyEnv/tree/2.8"
+            },
+            "time": "2025-11-11T17:29:15+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -2384,7 +2429,9 @@
     "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
+    "platform": {
+        "php": "^8.2"
+    },
     "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
