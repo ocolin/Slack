@@ -56,7 +56,7 @@ class HTTP
             'headers' => [
                 'Authorization' => "Bearer $token",
                 'Content-Type'  => 'application/json; charset=utf-8',
-                'User-Agent'    => 'Slack PHP Client 3.0',
+                'User-Agent'    => 'Ocolin Slack PHP Client 3.0',
             ]
         ]);
     }
@@ -76,7 +76,6 @@ class HTTP
         array|object $query = [] ) : Response
     {
         $method = $this->trim_Method( method: $method );
-        //if( gettype( $query ) === 'object' ) { $query = (array)$query; }
 
         return $this->format_Response( response: $this->client->get(
             uri: $method, options: [ 'query' => $query ])
@@ -104,7 +103,13 @@ class HTTP
         $method = $this->trim_Method( method: $method );
 
         return $this->format_Response( response: $this->client->post(
-            uri: $method, options: [ 'query' => $query, 'json' => $params ]
+            uri: $method, options: [
+                'query' => $query,
+                'json' => $params,
+                'headers' => [
+                    'Content-Type' => 'application/json; charset=utf-8',
+                ]
+            ]
         ));
     }
 
