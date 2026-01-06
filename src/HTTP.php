@@ -13,10 +13,15 @@ declare( strict_types = 1 );
 
 namespace Ocolin\Slack;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Ocolin\GlobalType\GT;
 use Psr\Http\Message\ResponseInterface;
+use Ocolin\GlobalType\GT;
+use GuzzleHttp\Client;
+
+use function str_starts_with;
+use function str_ends_with;
+use function json_decode;
+use function trim;
 
 class HTTP
 {
