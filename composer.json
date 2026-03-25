@@ -1,21 +1,26 @@
 {
     "name": "ocolin/slack",
     "description": "Basic PHP Slack Client",
+    "homepage": "https://github.com/ocolin/Slack",
     "type": "library",
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.10",
-        "ocolin/global-type": "^1.5"
+        "ocolin/global-type": "^2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^12.5",
+        "phpunit/phpunit": "^13.0",
         "phpstan/phpstan": "^2.1",
-        "ocolin/easyenv": "^2.8"
+        "ocolin/easyenv": "^3.0"
     },
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Ocolin\\Slack\\": "src/",
+            "Ocolin\\Slack\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Ocolin\\Slack\\Tests\\": "tests/"
         }
     },
@@ -24,5 +29,9 @@
             "name": "Colin Miller",
             "email": "ocolin@cruzio.com"
         }
-    ]
+    ],
+    "scripts": {
+        "test": "vendor/bin/phpunit --no-coverage --display-deprecations --display-notices",
+        "test-coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html coverage"
+    }
 }

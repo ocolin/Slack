@@ -1,37 +1,39 @@
 <?php
 
-/**
- * Pushover: A simple PHP client for Slack API services.
- *
- * @author  Colin Miller <ocolin@staff.cruzio.com>
- * @copyright Copyright(c) 2025 Colin Miller
- * @license MIT (opensource.org)
- * @version 3.0
- */
-
 declare( strict_types = 1 );
 
 namespace Ocolin\Slack;
 
 class Response
 {
+
     /**
-     * @var int HTTP status code.
+     * @var bool Slacks error response. True for success, false for errors.
+     */
+    public bool $ok;
+
+    /**
+     * @var int HTTP status code. Either 200 OK, or 429 for rate limiting.
      */
     public int $status;
 
     /**
-     * @var string HTTP status message.
+     * @var ?object API response data.
      */
-    public string $status_message;
+    public ?object $body = null;
 
     /**
-     * @var array<string[]> HTTP headers.
+     * @var string|null Error messaging used if OK is false.
      */
-    public array $headers;
+    public ?string $error = null;
 
     /**
-     * @var object API response output.
+     * @var string|null Used for warning messages.
      */
-    public object $body;
+    public ?string $warning = null;
+
+    /**
+     * @var int|null How long to wait if rate limiting occurs.
+     */
+    public ?int $retry_after = null;
 }
