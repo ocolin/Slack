@@ -18,6 +18,9 @@ You need to simply paste the desired Slack API method, include any required quer
 
 In order to use the tool you must provide a Bearer token in order to authenticate with the Slack API server. There are two ways this can be done.
 
+- PHP >= 8.4
+- guzzlehttp/guzzle >= 7.10
+- ocolin/global-type >= 2.0
 - Supplying a token to the constructor
 - Using an environment variable.
 
@@ -26,13 +29,12 @@ In order to use the tool you must provide a Bearer token in order to authenticat
 ### Constructor arguments
 
 - token - Slack authentication token. Optional if using environment variable.
-- verify - Verify the SSL connection. Defaults to false.
-- timeout - Set HTTP timeout in seconds. Defaults to 20 seconds.
+- options - Array of optional Guzzle client settings. 
 
 ### EXAMPLE: Using environment variable
 
 ```php
-
+// Manual env for demonstration.
 $_ENV['SLACK_TOKEN'];
 $slack = new Ocolin\Slack\Client();
 ```
@@ -42,8 +44,10 @@ $slack = new Ocolin\Slack\Client();
 ```php
 $slack = new Ocolin\Slack\Client(
       token: 'yourtokengoeshere',
-     verify: true,
-    timeout: 10
+    options: [
+        'timeout' => 20,
+        'verify'  => true
+    ]
 );
 ```
 
@@ -101,28 +105,19 @@ $response = $slack->post(
 );
 ```
 
-Expected output:
+## Output Format
 
-```php
-stdClass Object
-(
-    [ok] => 
-    [error] => This is a test
-    [args] => stdClass Object
-        (
-            [error] => This is a test
-            [token] => lkjskjkjsdf-sdfgdfdkq60G4K8
-        )
+| property | type    | Description                    |
+|----------|---------|--------------------------------|
+| ok| Boolean | Call was success/failure       |
+|status| Int     | HTTP status code               |
+|body| Object  | The full Slack response object |
+|error| string  | Error message from server.     |
+|warning| string  | Warning from server            |
+|retry_after| int     | Seconds to wait for rate limit |
 
-    [warning] => missing_charset
-    [response_metadata] => stdClass Object
-        (
-            [warnings] => Array
-                (
-                    [0] => missing_charset
-                )
 
-        )
+## UPDATES NEEDED
 
-)
-```
+- Unit testing.
+- README revamp

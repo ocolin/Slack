@@ -2,15 +2,17 @@
 
 declare( strict_types = 1 );
 
+namespace Ocolin\Slack\Test;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Ocolin\EasyEnv\LoadEnv;
-use Ocolin\EasyEnv\Errors\EasyEnvInvalidFilePathError;
-use Ocolin\EasyEnv\Errors\EasyEnvFileHandleError;
+use Ocolin\EasyEnv\EasyEnvFileHandleError;
+use Ocolin\EasyEnv\Env;
 
 try {
-    new LoadEnv( files: __DIR__ . '/../.env', append: true );
+    Env::load( files: __DIR__ . '/../.env', append: true );
 }
-catch( EasyEnvFileHandleError | EasyEnvInvalidFilePathError $e ) {
-    die ( $e->getMessage() );
+catch( EasyEnvFileHandleError $e ) {
+    echo $e->getMessage();
+    exit(1);
 }
